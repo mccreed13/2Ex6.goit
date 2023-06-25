@@ -1,23 +1,26 @@
 package com.goit;
 
-import com.goit.dto.LongestProject;
-import com.goit.dto.MaxProjectCountClient;
-import com.goit.dto.MaxSalaryWorker;
-import com.goit.dto.YoungestEldestWorker;
+import com.goit.conf.FlywayConfigurations;
+import com.goit.crud.Client;
+import com.goit.crud.ClientService;
+import com.goit.crud.JDBCRepository;
 
-import java.sql.Connection;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
 public class Main {
 
-    public static void main(String[] args) throws SQLException {
-        Connection connection = Database.getInstance().getConnection();
-        DatabaseQueryService databaseQueryService = new DatabaseQueryService();
-        List<MaxProjectCountClient> maxProjectCountClientList = databaseQueryService.findMaxProjectsClient();
-        List<MaxSalaryWorker> maxSalaryWorkerList = databaseQueryService.findMaxSalaryWorker();
-        List<LongestProject> longestProjectList = databaseQueryService.findLongestProject();
-        List<YoungestEldestWorker> youngestEldestWorkerList = databaseQueryService.findYoungestEldestWorker();
+    public static void main(String[] args) throws IOException, SQLException {
+        new FlywayConfigurations()
+                .setup()
+                .migrate();
+        JDBCRepository<Client> repository = new ClientService(Database.getInstance().getConnection());
+        List<Client> list = repository.listAll();
+        System.out.println(list);
+        repository.create("TEST");
+        list = repository.listAll();
+        System.out.println(list);
     }
 }
 

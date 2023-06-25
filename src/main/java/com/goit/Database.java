@@ -35,21 +35,6 @@ public class Database implements AutoCloseable {
         return connection;
     }
 
-    public ResultSet executeQuery(String sql) throws SQLException {
-        preparedStatement = connection.prepareStatement(sql);
-        return preparedStatement.executeQuery();
-    }
-
-    public int executeUpdate(String sql) throws SQLException {
-        preparedStatement = connection.prepareStatement(sql);
-        return preparedStatement.executeUpdate(sql);
-    }
-
-    public boolean execute(String sql) throws SQLException {
-        preparedStatement = connection.prepareStatement(sql);
-        return preparedStatement.execute();
-    }
-
     @Override
     public void close() throws Exception {
         statement.close();
